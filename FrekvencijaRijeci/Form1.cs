@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -40,16 +41,26 @@ namespace FrekvencijaRijeci
                 using (StreamReader sr = new StreamReader(filepath))
                 {
                     string line;
-
+                   
                     while ((line = sr.ReadLine()) != null)
                     {
+                    
                         lista = line.Split(' ').ToList();
+
                         foreach (var s in lista)
                         {
                         string malaSlova = s.ToLower();
-                        if (malaSlova.Length < 2)
-                            continue;
 
+                        //removing non letters from string
+                        Regex rgx = new Regex("[^a-zA-Z0-9]");
+                        malaSlova = rgx.Replace(malaSlova, "");
+
+                        //checking if string is null or whitespace
+                        if (string.IsNullOrWhiteSpace(malaSlova)) {
+                            continue;
+                        }
+
+                        
                         if (rijeci.TryGetValue(malaSlova, out int value))
                         {
                             rijeci[malaSlova]++;
